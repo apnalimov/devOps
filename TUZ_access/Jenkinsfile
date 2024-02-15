@@ -1,0 +1,41 @@
+def gitCredentialsId = 'asdfasdf'
+JBITBACKET = "git@ссылкаasdfasdfasdf:7999"
+
+def secrets = [
+    [path: 'asdfasdfasdf/A/asdfasdf/GLOB/asdfasdf/KV/approle', engineVersion: 1, secretValues: [
+            [envVar: 'metabase_pass', vaultKey: 'local_pass'],
+            [envVar: 'metabase_user', vaultKey: 'local_user'],
+            [envVar: 'vmware_pass', vaultKey: 'vmware_pass'],
+            [envVar: 'vmware_user', vaultKey: 'vmware_user'],
+            [envVar: 'portal_token', vaultKey: 'portal_token'],
+            [envVar: 'lime_token', vaultKey: 'lime_token'],
+            [envVar: 'bitbucket_cred_ssh', vaultKey: 'bitbucket_cred_ssh'],
+            [envVar: 'bitbucket_cred_user', vaultKey: 'bitbucket_cred_user']
+            ]]
+]
+
+def configuration = [vaultUrl: 'https://asdfasdfasdf',
+    vaultCredentialId: 'asdfasdfasdf',
+    engineVersion: 1
+]
+
+pipeline {
+  agent any
+  stages {
+    stage('version') {
+      steps {
+        sh 'python3 --version'
+      }
+    }
+    stage('script') {
+      steps {
+        withVault([configuration: configuration, vaultSecrets: secrets]) {
+          sh """ python3 jenkins/TUZaccsess/script.py --metabase_user "${metabase_user}" --metabase_pass "${metabase_pass}" """
+        }
+      }
+    }
+    // stage('Cleanup') {
+    //  step ([$class: 'WsCleanup'])
+    // }
+  }
+}

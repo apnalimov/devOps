@@ -1,0 +1,25 @@
+- name: create django container
+  hosts: first_vds
+  tasks:
+    - name: create docker image
+      command: docker build -t djangoimage ./toDoApp
+    - name: docker run container
+      command: docker run --name djangocontainer -p 8000:8000 -d djangoimage
+  tags:
+         - create_django_container
+
+- name: delete django container
+  hosts: first_vds
+  tasks:
+    - name: docker stop container
+      command: docker stop djangocontainer
+    - name: docker rm container
+      command: docker rm djangocontainer
+    - name: rm docker image
+      command: docker image rm djangoimage
+  tags:
+     - delete_django_container
+
+
+# ansible-playbook playbook.yaml --tags "create_django_container" -i inventory.ini   
+# ansible-playbook playbook.yaml --tags "delete_django_container" -i inventory.ini   
