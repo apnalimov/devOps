@@ -18,7 +18,7 @@
     - name: rm docker image
       command: docker image rm djangoimage
   tags:
-     - delete_django_container˝
+     - delete_django_container
 
      
 # ansible-playbook playbook.yaml --tags "create_django_container" -i inventory.ini   
