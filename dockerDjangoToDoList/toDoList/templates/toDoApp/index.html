@@ -1,0 +1,61 @@
+{% extends 'toDoApp/layout.html' %}
+
+{% block content %}
+
+<div>
+    <h3>Форма добавления новых задачь</h3>
+    <form action="{% url 'add' %}" method="post">
+        {% csrf_token %}
+        <div class="input-group input-group-sm mb-3">
+            <div class="col">
+                <div class="row mb-2">
+                    <span class="input-group-text" id="inputGroup-sizing-sm">Введите название задачи:</span>
+                    <input name="title" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+                </div>
+                <div class="row mb-2">
+                    <span class="input-group-text" id="inputGroup-sizing-sm">Введите описание задачи:</span>
+                    <input name="body" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+                </div>
+                <div class="row mb-2">
+                    <span class="input-group-text" id="inputGroup-sizing-sm">Введите дату создания:</span>
+                    <input name="open_date" type="datetime-local" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+                </div>
+                <div class="row mb-2">
+                    <span class="input-group-text" id="inputGroup-sizing-sm">Введите контрольный срок:</span>
+                    <input name="control_date" type="datetime-local" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+                </div>
+                <!-- <input type="datetime-local" name="fds" id=""> -->
+                <div class="row mb-2">
+                    <a href="{% url 'add' %}"><button type="submit" class="w-100 btn btn-lg btn-outline-success mb-3">Добавить</button></a>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="row row-cols-md-3 mb-3">
+    {% for todo in todos %}
+        <div class="col">
+            <div class="card mb-4 rounded-3 shadow-sm">
+            <div class="card-header py-3">
+                <h4 class="my-0 fw-normal text-center">№{{todo.id}} {{ todo.title }}</h4>
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled mt-3 mb-4">
+                <li>Описание задачи:<br>{{ todo.body }}</li>
+                <li class="mt-5">Дата создания: {{ todo.open_date }}</li>
+                <li>Контрольный срок: {{ todo.control_date }}</li><br>
+                <li>Статус:{% if todo.is_complete == False %} Открыто {% else %} Закрыто {% endif %}</li>
+                </ul>
+                {% if todo.is_complete == False %}
+                <a href="{% url 'update' todo_id=todo.id %}"><button type="button" class="w-100 btn btn-lg btn-outline-success mb-3">Закрыть</button></a>
+                {% else %}
+                <a href="{% url 'update' todo_id=todo.id %}"><button type="button" class="w-100 btn btn-lg btn-outline-warning mb-3">Открыть</button></a>
+                {% endif %}
+                <a href="{% url 'delete' todo_id=todo.id %}"><button type="button" class="w-100 btn btn-lg btn-outline-danger mb-3">Удалить</button></a>
+            </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+{% endblock content %}

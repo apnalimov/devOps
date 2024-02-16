@@ -2,7 +2,7 @@
   hosts: first_vds
   tasks:
     - name: create docker image
-      command: docker build -t djangoimage ./toDoApp
+      command: docker build -t djangoimage ./dockerDjangoToDoList
     - name: docker run container
       command: docker run --name djangocontainer -p 8000:8000 -d djangoimage
   tags:
